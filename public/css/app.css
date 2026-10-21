@@ -1,0 +1,521 @@
+/*
+ * Tema Restikey di atas Bootstrap 5.3 (public/vendor/bootstrap), tanpa build tool.
+ * Warna diatur lewat CSS variable Bootstrap.
+ */
+
+/* ===== Token ===== */
+:root,
+[data-bs-theme=light] {
+    --rk-rose: #B76E79;       /* dekoratif */
+    --rk-rose-deep: #9E5560;  /* tombol/teks: kontras 5.3:1 dengan putih (rose biasa hanya 3.6:1) */
+    --rk-rose-dark: #7E444D;
+    --rk-gold: #C9A96E;
+    --rk-ivory: #FBF7F4;
+    --rk-blush: #F3E4E1;
+    --rk-cocoa: #3E2C2E;
+    --rk-serif: 'Cormorant Garamond', Georgia, serif;
+
+    --bs-primary: #9E5560;
+    --bs-primary-rgb: 158, 85, 96;
+    --bs-primary-text-emphasis: #3F2226;
+    --bs-primary-bg-subtle: #F5EEEF;
+    --bs-primary-border-subtle: #D8BBBF;
+    --bs-secondary: #C9A96E;
+    --bs-secondary-rgb: 201, 169, 110;
+    --bs-secondary-text-emphasis: #50442C;
+    --bs-secondary-bg-subtle: #F4EEE2;
+    --bs-secondary-border-subtle: #E9DDC5;
+    --bs-light: #F3E4E1;
+    --bs-light-rgb: 243, 228, 225;
+    --bs-dark: #3E2C2E;
+    --bs-dark-rgb: 62, 44, 46;
+
+    --bs-body-font-family: 'Jost', sans-serif;
+    --bs-body-line-height: 1.6;
+    --bs-body-color: #3E2C2E;
+    --bs-body-color-rgb: 62, 44, 46;
+    --bs-body-bg: #FBF7F4;
+    --bs-body-bg-rgb: 251, 247, 244;
+    --bs-emphasis-color: #3E2C2E;
+    --bs-secondary-color: rgba(62, 44, 46, .75);
+
+    --bs-link-color: #9E5560;
+    --bs-link-color-rgb: 158, 85, 96;
+    --bs-link-hover-color: #7E444D;
+    --bs-link-hover-color-rgb: 126, 68, 77;
+
+    --bs-border-radius: .5rem;
+    --bs-border-radius-lg: .75rem;
+    --bs-focus-ring-color: rgba(158, 85, 96, .25);
+}
+
+/* ===== Tipografi ===== */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: var(--rk-serif);
+    font-weight: 600;
+}
+
+/* ===== Komponen Bootstrap ===== */
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #9E5560;
+    --bs-btn-border-color: #9E5560;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #86484F;
+    --bs-btn-hover-border-color: #7E444D;
+    --bs-btn-focus-shadow-rgb: 173, 111, 120;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #7E444D;
+    --bs-btn-active-border-color: #77404A;
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #9E5560;
+    --bs-btn-disabled-border-color: #9E5560;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: #9E5560;
+    --bs-btn-border-color: #9E5560;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #9E5560;
+    --bs-btn-hover-border-color: #9E5560;
+    --bs-btn-focus-shadow-rgb: 158, 85, 96;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #9E5560;
+    --bs-btn-active-border-color: #9E5560;
+    --bs-btn-disabled-color: #9E5560;
+    --bs-btn-disabled-border-color: #9E5560;
+}
+
+.btn-secondary {
+    --bs-btn-color: #3E2C2E;
+    --bs-btn-bg: #C9A96E;
+    --bs-btn-border-color: #C9A96E;
+    --bs-btn-hover-color: #3E2C2E;
+    --bs-btn-hover-bg: #D1B684;
+    --bs-btn-hover-border-color: #CEB27D;
+    --bs-btn-focus-shadow-rgb: 180, 151, 101;
+    --bs-btn-active-color: #3E2C2E;
+    --bs-btn-active-bg: #D4BA8B;
+    --bs-btn-active-border-color: #CEB27D;
+    --bs-btn-disabled-color: #3E2C2E;
+    --bs-btn-disabled-bg: #C9A96E;
+    --bs-btn-disabled-border-color: #C9A96E;
+}
+
+.btn-outline-secondary {
+    --bs-btn-color: #7A6234;
+    --bs-btn-border-color: #C9A96E;
+    --bs-btn-hover-color: #3E2C2E;
+    --bs-btn-hover-bg: #C9A96E;
+    --bs-btn-hover-border-color: #C9A96E;
+    --bs-btn-focus-shadow-rgb: 201, 169, 110;
+    --bs-btn-active-color: #3E2C2E;
+    --bs-btn-active-bg: #C9A96E;
+    --bs-btn-active-border-color: #C9A96E;
+    --bs-btn-disabled-color: #7A6234;
+    --bs-btn-disabled-border-color: #C9A96E;
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    border-color: #CFAAB0;
+    box-shadow: 0 0 0 .25rem rgba(158, 85, 96, .25);
+}
+
+.form-check-input:checked {
+    background-color: #9E5560;
+    border-color: #9E5560;
+}
+
+.pagination {
+    --bs-pagination-active-bg: #9E5560;
+    --bs-pagination-active-border-color: #9E5560;
+    --bs-pagination-focus-box-shadow: 0 0 0 .25rem rgba(158, 85, 96, .25);
+}
+
+.nav-pills { --bs-nav-pills-link-active-bg: #9E5560; }
+.dropdown-menu { --bs-dropdown-link-active-bg: #9E5560; }
+.progress, .progress-stacked { --bs-progress-bar-bg: #9E5560; }
+.card { --bs-card-border-color: rgba(183, 110, 121, .15); }
+
+.list-group {
+    --bs-list-group-active-bg: #9E5560;
+    --bs-list-group-active-border-color: #9E5560;
+}
+
+/* ===== Layout umum ===== */
+
+/* Navbar sticky tidak menutupi judul saat lompat ke #anchor */
+html { scroll-padding-top: 4.5rem; }
+
+.brand-wordmark {
+    font-family: var(--rk-serif);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: .02em;
+    color: var(--rk-cocoa);
+}
+
+.site-footer {
+    padding: 2.5rem 0;
+    border-top: 1px solid rgba(183, 110, 121, .2);
+    font-size: .9rem;
+    color: rgba(62, 44, 46, .7);
+}
+
+.site-footer a { color: inherit; }
+
+/* ===== Landing ===== */
+.section { padding: 5rem 0; }
+.section-blush { background: var(--rk-blush); }
+
+.section-title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    line-height: 1.15;
+    margin-bottom: .75rem;
+}
+
+.section-lead {
+    max-width: 38rem;
+    color: rgba(62, 44, 46, .75);
+}
+
+/* Hero */
+.hero { padding: 4.5rem 0 5rem; }
+
+.hero h1 {
+    font-size: clamp(2.6rem, 6vw, 4.25rem);
+    line-height: 1.05;
+    margin-bottom: 1.25rem;
+}
+
+.hero .lead {
+    max-width: 34rem;
+    color: rgba(62, 44, 46, .8);
+}
+
+/* Kartu undangan: elemen utama hero */
+.invitation {
+    position: relative;
+    max-width: 26rem;
+    margin: 0 auto;
+    padding: 3rem 2.25rem;
+    background: #fff;
+    text-align: center;
+    font-family: var(--rk-serif);
+    border: 1px solid var(--rk-gold);
+    outline: 1px solid var(--rk-gold);
+    outline-offset: -10px;
+    box-shadow: 0 1.5rem 3rem -1.5rem rgba(62, 44, 46, .35);
+    transform: rotate(-1.5deg);
+}
+
+.invitation .ornament {
+    color: var(--rk-gold);
+    font-size: 1.5rem;
+}
+
+.invitation-intro {
+    font-size: 1.1rem;
+    color: rgba(62, 44, 46, .7);
+    margin: .75rem 0 1.5rem;
+}
+
+.invitation-amp {
+    font-size: 2rem;
+    font-style: italic;
+    color: var(--rk-rose);
+    line-height: 1;
+    margin: .25rem 0;
+}
+
+.invitation-signoff {
+    margin-top: 1.75rem;
+    font-family: var(--bs-body-font-family);
+    font-size: .85rem;
+    color: rgba(62, 44, 46, .6);
+}
+
+/* Isian kosong di undangan: garis titik digambar sekali saat halaman dimuat */
+.blank {
+    display: block;
+    position: relative;
+    margin: .35rem auto;
+    padding-bottom: .2rem;
+    font-style: italic;
+    color: rgba(62, 44, 46, .45);
+}
+
+.blank::after {
+    content: '';
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    bottom: 0;
+    border-bottom: 2px dotted var(--rk-rose);
+    transform-origin: left;
+    animation: draw-blank .9s ease-out both;
+}
+
+.blank.blank-name { font-size: 1.9rem; }
+.blank.blank-date { font-size: 1.3rem; }
+.blank:nth-of-type(2)::after { animation-delay: .25s; }
+.blank:nth-of-type(3)::after { animation-delay: .5s; }
+.blank:nth-of-type(4)::after { animation-delay: .75s; }
+
+@keyframes draw-blank {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .blank::after { animation: none; }
+}
+
+/* Layanan */
+.service-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.25rem 0;
+}
+
+.service-item + .service-item { border-top: 1px solid rgba(183, 110, 121, .2); }
+
+.service-item .bi {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--rk-blush);
+    color: var(--rk-rose-deep);
+    font-size: 1.2rem;
+}
+
+.service-item h3 {
+    font-size: 1.4rem;
+    margin-bottom: .2rem;
+}
+
+.service-item p {
+    margin: 0;
+    color: rgba(62, 44, 46, .75);
+}
+
+/* Paket */
+.package-card {
+    position: relative;
+    height: 100%;
+    background: #fff;
+    border: 1px solid rgba(183, 110, 121, .2);
+    border-radius: var(--bs-border-radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.package-card.is-popular { border: 2px solid var(--rk-gold); }
+
+.package-card img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    width: 100%;
+}
+
+.package-card .package-body {
+    padding: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.package-card .package-price {
+    font-family: var(--rk-serif);
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--rk-rose-deep);
+}
+
+.package-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 1.75rem;
+    flex-grow: 1;
+}
+
+.package-card li {
+    display: flex;
+    gap: .5rem;
+    padding: .3rem 0;
+}
+
+.package-card li .bi { color: var(--rk-gold); }
+
+.popular-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--rk-gold);
+    color: var(--rk-cocoa);
+    font-size: .8rem;
+    font-weight: 500;
+    padding: .3rem .75rem;
+    border-radius: 2rem;
+}
+
+.addon-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: .5rem 2.5rem;
+}
+
+.addon-list div {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .5rem 0;
+    border-bottom: 1px dotted rgba(62, 44, 46, .25);
+}
+
+.addon-list span:last-child {
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+/* Cara booking (urutan nyata, karena itu bernomor) */
+.steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
+    counter-reset: step;
+}
+
+.steps li { counter-increment: step; }
+
+.steps li::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    border: 1px solid var(--rk-rose-deep);
+    color: var(--rk-rose-deep);
+    font-family: var(--rk-serif);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.steps h3 {
+    font-size: 1.35rem;
+    margin-bottom: .35rem;
+}
+
+.steps p {
+    margin: 0;
+    font-size: .95rem;
+    color: rgba(62, 44, 46, .75);
+}
+
+/* Portofolio: foto pertama lebih besar */
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.portfolio-grid figure {
+    position: relative;
+    margin: 0;
+    overflow: hidden;
+    border-radius: var(--bs-border-radius);
+    aspect-ratio: 4 / 3;
+}
+
+.portfolio-grid figure:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+    aspect-ratio: auto;
+}
+
+.portfolio-grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portfolio-grid figcaption {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 2.5rem 1rem .85rem;
+    background: linear-gradient(transparent, rgba(62, 44, 46, .8));
+    color: #fff;
+    font-size: .9rem;
+}
+
+.portfolio-grid figcaption strong {
+    display: block;
+    font-family: var(--rk-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* Testimoni */
+.testimonial {
+    max-width: 44rem;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.testimonial blockquote {
+    font-family: var(--rk-serif);
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.4;
+    margin-bottom: 1.25rem;
+}
+
+.testimonial .stars { color: var(--rk-gold); }
+
+.testimonial-carousel .carousel-control-prev,
+.testimonial-carousel .carousel-control-next {
+    width: 3rem;
+    color: var(--rk-rose-deep);
+}
+
+.testimonial-carousel .carousel-indicators {
+    position: static;
+    margin-top: 2rem;
+}
+
+.testimonial-carousel .carousel-indicators [data-bs-target] { background-color: var(--rk-rose-deep); }
+
+/* Ajakan penutup */
+.cta-band {
+    background: var(--rk-cocoa);
+    color: var(--rk-ivory);
+}
+
+.cta-band h2 { color: var(--rk-ivory); }
+
+.cta-band p {
+    max-width: 36rem;
+    color: rgba(251, 247, 244, .8);
+}
+
+/* ===== Responsif ===== */
+@media (max-width: 991.98px) {
+    .invitation { transform: none; }
+    .steps { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767.98px) {
+    .section { padding: 3.5rem 0; }
+    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
+}

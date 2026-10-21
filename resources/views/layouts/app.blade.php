@@ -11,9 +11,13 @@
     <meta name="description" content="@yield('description', 'Restikey Wedding Organizer: paket pernikahan, cek ketersediaan tanggal, dan booking online.')">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=cormorant-garamond:500,600,500i|jost:400,500" rel="stylesheet">
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <link href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.min.css') }}" rel="stylesheet">
+    {{-- ?v= agar browser memuat ulang CSS setelah file diubah (pengganti hash Vite) --}}
+    <link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet">
+    @stack('styles')
 </head>
 <body>
     <div id="app">
@@ -85,5 +89,8 @@
             </div>
         </footer>
     </div>
+
+    <script src="{{ asset('vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
+    @stack('scripts')
 </body>
 </html>
