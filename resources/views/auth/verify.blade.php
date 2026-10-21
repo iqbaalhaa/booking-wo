@@ -1,28 +1,22 @@
 @extends('layouts.app')
 
+@section('title', 'Verifikasi Email')
+
 @section('content')
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
+    <x-card class="auth-card" body-class="p-4 p-md-5">
+        <h1 class="h2 mb-3">Verifikasi email Anda</h1>
 
-                <div class="card-body">
-                    @if (session('resent'))
-                        <div class="alert alert-success" role="alert">
-                            {{ __('A fresh verification link has been sent to your email address.') }}
-                        </div>
-                    @endif
+        @if (session('resent'))
+            <x-alert type="success">Tautan verifikasi baru sudah dikirim ke email Anda.</x-alert>
+        @endif
 
-                    {{ __('Before proceeding, please check your email for a verification link.') }}
-                    {{ __('If you did not receive the email') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+        <p>Sebelum melanjutkan, buka tautan verifikasi yang kami kirim ke email Anda.</p>
+
+        <form method="POST" action="{{ route('verification.resend') }}">
+            @csrf
+            <button type="submit" class="btn btn-outline-primary">Kirim ulang tautan verifikasi</button>
+        </form>
+    </x-card>
 </div>
 @endsection

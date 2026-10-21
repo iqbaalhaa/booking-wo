@@ -21,11 +21,12 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
+     * Admin ke panel admin, customer ke dashboard.
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo(): string
+    {
+        return auth()->user()->homeUrl();
+    }
 
     /**
      * Create a new controller instance.

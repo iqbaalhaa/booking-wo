@@ -3,11 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', config('app.name').' Wedding Organizer')</title>
+    <title>@hasSection('title')@yield('title') | @endif{{ config('app.name') }} Wedding Organizer</title>
     <meta name="description" content="@yield('description', 'Restikey Wedding Organizer: paket pernikahan, cek ketersediaan tanggal, dan booking online.')">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,80 +13,92 @@
 
     <link href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.min.css') }}" rel="stylesheet">
-    {{-- ?v= agar browser memuat ulang CSS setelah file diubah (pengganti hash Vite) --}}
+    {{-- ?v= agar browser memuat ulang CSS setelah file diubah --}}
     <link href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}" rel="stylesheet">
     @stack('styles')
 </head>
 <body>
-    <div id="app">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top">
-            <div class="container">
-                <a class="navbar-brand brand-wordmark" href="{{ route('landing') }}">
-                    {{ config('app.name') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Buka menu">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+    @php
+        // Menu muncul otomatis begitu route-nya dibuat di phase berikutnya
+        $menu = array_filter([
+            'Beranda' => route('landing'),
+            'Paket' => Route::has('packages.index') ? route('packages.index') : route('landing').'#paket',
+            'Portofolio' => Route::has('portfolios.index') ? route('portfolios.index') : route('landing').'#portofolio',
+            'Cek Tanggal' => Route::has('availability.index') ? route('availability.index') : null,
+            'Booking Saya' => auth()->user()?->isCustomer() && Route::has('bookings.index') ? route('bookings.index') : null,
+        ]);
+    @endphp
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item"><a class="nav-link" href="{{ route('landing') }}#layanan">Layanan</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('landing') }}#paket">Paket</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('landing') }}#cara-booking">Cara Booking</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('landing') }}#portofolio">Portofolio</a></li>
-                    </ul>
+    <nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+        <div class="container">
+            <a class="navbar-brand brand-wordmark" href="{{ route('landing') }}">{{ config('app.name') }}</a>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">Masuk</a>
-                                </li>
-                            @endif
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Buka menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="btn btn-primary btn-sm ms-lg-2" href="{{ route('register') }}">Daftar</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav mx-auto">
+                    @foreach ($menu as $label => $url)
+                        <li class="nav-item">
+                            <a @class(['nav-link', 'active' => url()->current() === $url]) href="{{ $url }}"
+                               @if (url()->current() === $url) aria-current="page" @endif>{{ $label }}</a>
+                        </li>
+                    @endforeach
+                </ul>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        Keluar
+                <ul class="navbar-nav align-items-lg-center gap-lg-2">
+                    @guest
+                        <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Masuk</a></li>
+                        <li class="nav-item"><a class="btn btn-primary btn-sm" href="{{ route('register') }}">Daftar</a></li>
+                    @else
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle me-1" aria-hidden="true"></i>{{ auth()->user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ auth()->user()->homeUrl() }}">
+                                        {{ auth()->user()->isAdmin() ? 'Panel Admin' : 'Dashboard' }}
                                     </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                </li>
+                                @if (Route::has('profile.edit'))
+                                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Profil</a></li>
+                                @endif
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
                                         @csrf
+                                        <button type="submit" class="dropdown-item">Keluar</button>
                                     </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
+                                </li>
+                            </ul>
+                        </li>
+                    @endguest
+                </ul>
             </div>
-        </nav>
+        </div>
+    </nav>
 
-        <main class="@yield('main-class', 'py-4')">
-            @yield('content')
-        </main>
-
-        <footer class="site-footer">
-            <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
-                <span><span class="brand-wordmark fs-5">{{ config('app.name') }}</span> Wedding Organizer</span>
-                <span>&copy; {{ date('Y') }} {{ config('app.name') }}. Hak cipta dilindungi.</span>
+    <main class="@yield('main-class', 'py-4 py-lg-5')">
+        @if (session()->hasAny(['success', 'status', 'error', 'warning', 'info']))
+            <div class="container mt-3">
+                <x-alert />
             </div>
-        </footer>
-    </div>
+        @endif
+
+        @yield('content')
+    </main>
+
+    <footer class="site-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+            <span><span class="brand-wordmark fs-5">{{ config('app.name') }}</span> Wedding Organizer</span>
+            <span>&copy; {{ date('Y') }} {{ config('app.name') }}. Hak cipta dilindungi.</span>
+        </div>
+    </footer>
+
+    @stack('modals')
 
     <script src="{{ asset('vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
     @stack('scripts')

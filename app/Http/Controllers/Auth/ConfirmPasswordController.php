@@ -21,11 +21,12 @@ class ConfirmPasswordController extends Controller
     use ConfirmsPasswords;
 
     /**
-     * Where to redirect users when the intended url fails.
-     *
-     * @var string
+     * Admin ke panel admin, customer ke dashboard.
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo(): string
+    {
+        return auth()->user()->homeUrl();
+    }
 
     /**
      * Create a new controller instance.

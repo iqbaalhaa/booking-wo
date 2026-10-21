@@ -21,9 +21,10 @@ class ResetPasswordController extends Controller
     use ResetsPasswords;
 
     /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
+     * Admin ke panel admin, customer ke dashboard.
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo(): string
+    {
+        return auth()->user()->homeUrl();
+    }
 }

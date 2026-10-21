@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\DeletesReplacedFiles;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Package extends Model
 {
-    use HasFactory;
+    use DeletesReplacedFiles, HasFactory;
+
+    protected array $fileColumns = ['thumbnail'];
 
     protected $fillable = [
         'name',
@@ -34,9 +38,50 @@ class Package extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        // Slug dibuat sekali saat paket dibuat; tidak berubah saat nama diedit agar URL yang sudah dibagikan tetap valid
+        static::creating(function (Package $package) {
+            $package->slug = $package->slug ?: static::uniqueSlug($package->name);
+        });
+
+        static::saved(fn () => static::flushCatalogCache());
+        static::deleted(fn () => static::flushCatalogCache());
+    }
+
+    public const CATALOG_CACHE_KEY = 'packages:active-catalog';
+
+    /**
+     * Paket aktif beserta fiturnya, urut harga (dipakai landing, /paket, form booking).
+     * Di-cache sampai ada perubahan paket/fitur.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, static>
+     */
+    public static function activeCatalog()
+    {
+        return Cache::rememberForever(self::CATALOG_CACHE_KEY, fn () => static::active()->with('features')->orderBy('price')->get());
+    }
+
+    public static function flushCatalogCache(): void
+    {
+        Cache::forget(self::CATALOG_CACHE_KEY);
+    }
+
+    public static function uniqueSlug(string $name): string
+    {
+        $base = Str::slug($name) ?: 'paket';
+        $slug = $base;
+
+        for ($i = 2; static::where('slug', $slug)->exists(); $i++) {
+            $slug = "{$base}-{$i}";
+        }
+
+        return $slug;
+    }
+
     public function features(): HasMany
     {
-        return $this->hasMany(PackageFeature::class);
+        return $this->hasMany(PackageFeature::class)->orderBy('id');
     }
 
     public function bookings(): HasMany

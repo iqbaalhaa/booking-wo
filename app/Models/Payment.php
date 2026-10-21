@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Payment extends Model
@@ -98,11 +97,10 @@ class Payment extends Model
         return $query->where('type', self::TYPE_PELUNASAN);
     }
 
+    /** Bukti disimpan privat; URL ini melewati pengecekan akses (lihat PaymentController@proof). */
     protected function proofUrl(): Attribute
     {
-        return Attribute::get(fn () => Str::startsWith($this->proof_image, 'http')
-            ? $this->proof_image
-            : Storage::disk('public')->url($this->proof_image));
+        return Attribute::get(fn () => route('payments.proof', $this));
     }
 
     public function isPdf(): bool

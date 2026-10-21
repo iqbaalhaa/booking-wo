@@ -69,6 +69,12 @@ class User extends Authenticatable
         return $this->role === self::ROLE_CUSTOMER;
     }
 
+    /** Halaman tujuan setelah login: admin → panel admin, customer → dashboard. */
+    public function homeUrl(): string
+    {
+        return $this->isAdmin() ? route('admin.dashboard') : route('dashboard');
+    }
+
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);

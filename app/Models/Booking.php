@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\AvailabilityService;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -76,6 +77,13 @@ class Booking extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        // Status kalender ter-cache harus ikut berubah begitu booking dibuat/berubah status
+        static::saved(fn () => AvailabilityService::flushCache());
+        static::deleted(fn () => AvailabilityService::flushCache());
+    }
+
     /**
      * Kode unik format RSK-YYYYMMDD-XXXX (tanggal booking + 4 karakter acak).
      */
@@ -98,6 +106,39 @@ class Booking extends Model
     public function isCancellable(): bool
     {
         return in_array($this->status, self::CANCELLABLE_STATUSES, true);
+    }
+
+    /** DP minimal sesuai persentase di config, dibulatkan ke atas. */
+    public function minimumDp(): int
+    {
+        return (int) ceil($this->total_price * config('restikey.dp_percentage') / 100);
+    }
+
+    public function verifiedTotal(): int
+    {
+        return (int) $this->payments->where('status', Payment::STATUS_VERIFIED)->sum('amount');
+    }
+
+    public function remainingAmount(): int
+    {
+        return max(0, $this->total_price - $this->verifiedTotal());
+    }
+
+    public function hasVerifiedDp(): bool
+    {
+        return $this->payments->contains(fn (Payment $payment) => $payment->type === Payment::TYPE_DP && $payment->status === Payment::STATUS_VERIFIED);
+    }
+
+    /** Batas pelunasan: H-N sebelum acara. */
+    public function paymentDeadline(): Carbon
+    {
+        return $this->event_date->copy()->subDays(config('restikey.payment_deadline_days'));
+    }
+
+    /** Batas DP sebelum booking confirmed dibatalkan otomatis. */
+    public function dpDeadline(): ?Carbon
+    {
+        return $this->confirmed_at?->copy()->addDays(config('restikey.auto_cancel_days'));
     }
 
     public function user(): BelongsTo
@@ -125,7 +166,8 @@ class Booking extends Model
 
     public function payments(): HasMany
     {
-        return $this->hasMany(Payment::class);
+        // chaperone: $payment->booking langsung terisi booking induk, tanpa query tambahan
+        return $this->hasMany(Payment::class)->chaperone();
     }
 
     public function review(): HasOne

@@ -21,11 +21,12 @@ class VerificationController extends Controller
     use VerifiesEmails;
 
     /**
-     * Where to redirect users after verification.
-     *
-     * @var string
+     * Admin ke panel admin, customer ke dashboard.
      */
-    protected $redirectTo = '/home';
+    protected function redirectTo(): string
+    {
+        return auth()->user()->homeUrl();
+    }
 
     /**
      * Create a new controller instance.

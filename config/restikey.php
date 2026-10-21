@@ -32,6 +32,12 @@ return [
     // Booking confirmed tanpa DP verified dibatalkan otomatis setelah N hari
     'auto_cancel_days' => (int) env('RESTIKEY_AUTO_CANCEL_DAYS', 3),
 
+    // Jumlah maksimal per add-on dalam satu booking
+    'max_addon_quantity' => (int) env('RESTIKEY_MAX_ADDON_QUANTITY', 10),
+
+    // Kalender cek tanggal bisa dilihat sampai N bulan ke depan
+    'calendar_months_ahead' => (int) env('RESTIKEY_CALENDAR_MONTHS_AHEAD', 24),
+
     // Prefix kode booking: RSK-YYYYMMDD-XXXX
     'booking_code_prefix' => 'RSK',
 

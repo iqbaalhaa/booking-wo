@@ -12,19 +12,19 @@ class LandingController extends Controller
 {
     public function __invoke()
     {
-        $packages = Package::active()
-            ->with('features')
-            ->withCount(['bookings' => fn ($query) => $query->whereIn('status', Booking::LOCKING_STATUSES)])
-            ->orderBy('price')
-            ->take(3)
-            ->get();
+        $packages = Package::activeCatalog()->take(3);
 
-        // "Paling banyak dipilih" hanya jika memang ada booking
-        $popular = $packages->sortByDesc('bookings_count')->first();
+        // "Paling banyak dipilih" hanya jika memang ada booking yang terkonfirmasi
+        $popularId = Booking::locking()
+            ->whereIn('package_id', $packages->modelKeys())
+            ->selectRaw('package_id, COUNT(*) as total')
+            ->groupBy('package_id')
+            ->orderByDesc('total')
+            ->value('package_id');
 
         return view('landing', [
             'packages' => $packages,
-            'popularId' => $popular?->bookings_count ? $popular->id : null,
+            'popularId' => $popularId,
             'addons' => Addon::active()->orderBy('price')->get(),
             'portfolios' => Portfolio::with('package')->latest('event_date')->take(6)->get(),
             'reviews' => Review::published()->with(['user', 'booking.package'])->latest()->take(6)->get(),

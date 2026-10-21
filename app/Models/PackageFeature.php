@@ -15,6 +15,12 @@ class PackageFeature extends Model
         'feature',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(fn () => Package::flushCatalogCache());
+        static::deleted(fn () => Package::flushCatalogCache());
+    }
+
     public function package(): BelongsTo
     {
         return $this->belongsTo(Package::class);

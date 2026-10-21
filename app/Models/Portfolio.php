@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\DeletesReplacedFiles;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,9 @@ use Illuminate\Support\Str;
 
 class Portfolio extends Model
 {
-    use HasFactory;
+    use DeletesReplacedFiles, HasFactory;
+
+    protected array $fileColumns = ['image'];
 
     protected $fillable = [
         'title',

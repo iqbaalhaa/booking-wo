@@ -169,8 +169,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'phone' => [
+            'regex' => 'Format nomor telepon tidak valid, contoh: 081234567890.',
         ],
     ],
 

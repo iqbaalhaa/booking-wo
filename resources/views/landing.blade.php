@@ -4,7 +4,7 @@
 
 @php
     // Form booking dibuat di Phase 4; sampai saat itu tombol booking mengarah ke pendaftaran
-    $bookingUrl = fn (array $params = []) => Route::has('booking.create') ? route('booking.create', $params) : route('register');
+    $bookingUrl = fn (array $params = []) => Route::has('bookings.create') ? route('bookings.create', $params) : route('register');
 @endphp
 
 @section('content')
@@ -90,28 +90,7 @@
             <div class="row g-4">
                 @forelse ($packages as $package)
                     <div class="col-md-6 col-lg-4">
-                        <article class="package-card {{ $package->id === $popularId ? 'is-popular' : '' }}">
-                            @if ($package->id === $popularId)
-                                <span class="popular-badge">Paling banyak dipilih</span>
-                            @endif
-                            @if ($package->thumbnail_url)
-                                <img src="{{ $package->thumbnail_url }}" alt="Contoh dekorasi paket {{ $package->name }}" loading="lazy">
-                            @endif
-                            <div class="package-body">
-                                <h3 class="h2 mb-1">{{ $package->name }}</h3>
-                                <div class="package-price">{{ rupiah($package->price) }}</div>
-                                <div class="small text-body-secondary">Hingga {{ number_format($package->max_guests, 0, ',', '.') }} tamu</div>
-                                <ul>
-                                    @foreach ($package->features as $feature)
-                                        <li><i class="bi bi-check2" aria-hidden="true"></i> {{ $feature->feature }}</li>
-                                    @endforeach
-                                </ul>
-                                <a href="{{ $bookingUrl(['package' => $package->slug]) }}"
-                                   class="btn {{ $package->id === $popularId ? 'btn-primary' : 'btn-outline-primary' }} w-100">
-                                    Pilih paket {{ $package->name }}
-                                </a>
-                            </div>
-                        </article>
+                        @include('packages._card', ['popular' => $package->id === $popularId])
                     </div>
                 @empty
                     <p class="text-body-secondary">Paket sedang disiapkan. Silakan kembali lagi nanti.</p>
@@ -179,6 +158,8 @@
                         </figure>
                     @endforeach
                 </div>
+
+                <a href="{{ route('portfolios.index') }}" class="btn btn-outline-primary mt-4">Lihat semua portofolio</a>
             </div>
         </section>
     @endif
@@ -234,7 +215,11 @@
             <p class="mx-auto mb-4">
                 Satu tanggal hanya untuk satu pasangan. Begitu booking lain dikonfirmasi, tanggal itu tidak bisa dipesan lagi.
             </p>
-            <a href="{{ $bookingUrl() }}" class="btn btn-secondary btn-lg">Booking sekarang</a>
+            @if (Route::has('availability.index'))
+                <a href="{{ route('availability.index') }}" class="btn btn-secondary btn-lg">Cek ketersediaan tanggal</a>
+            @else
+                <a href="{{ $bookingUrl() }}" class="btn btn-secondary btn-lg">Booking sekarang</a>
+            @endif
         </div>
     </section>
 @endsection
